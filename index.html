@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual Wardrobe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&display=swap" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+  <body>
+    <div class="shell">
+
+      <!-- ── TITLE BAR ───────────────────────────────────────── -->
+      <header class="titlebar">
+        <div class="titlebar__left">
+          <button class="win-ctrl" id="back-btn"
+            style="display:none; width:auto; padding:0 8px; letter-spacing:1px; font-family:var(--font-head); font-size:10px;"
+            onclick="goBack()">← BACK</button>
+
+        </div>
+        <span class="titlebar__title">VIRTUAL WARDROBE</span>
+        <div class="titlebar__ctrls">
+          <button class="win-ctrl" id="logout-btn" style="display:none; width:auto; padding:0 8px; letter-spacing:1px; font-family:var(--font-head); font-size:10px;" onclick="confirmLogout()">LOG OUT</button>
+          <!-- <button class="win-ctrl">_</button>
+          <button class="win-ctrl">□</button>
+          <button class="win-ctrl" onclick="showScreen('home')">✕</button> -->
+        </div>
+      </header>
+
+      <!-- ── CANVAS ──────────────────────────────────────────── -->
+      <main class="canvas">
+          <!-- ⓪ AUTH LANDING -->
+    <section id="screen-auth-landing" class="screen active">
+      <div class="auth-landing">
+        <h1 class="home-title">VIRTUAL<br>WARDROBE</h1>
+        <div class="auth-landing-btns">
+          <button class="wbtn auth-landing-btn" onclick="showAuthScreen('login')">
+            LOG IN
+          </button>
+          <button class="wbtn auth-landing-btn auth-landing-btn--register" onclick="showAuthScreen('register')">
+            REGISTER
+          </button>
+        </div>
+      </div>
+    </section>
+ 
+    <!-- ⓪a LOGIN -->
+    <section id="screen-login" class="screen">
+      <div class="auth-box win-raised">
+        <div class="auth-box__title">LOG IN</div>
+ 
+        <div class="auth-field">
+          <label class="fleg">Email</label>
+          <input type="email" id="login-email" class="auth-input"
+                 placeholder="your@email.com" autocomplete="email"/>
+        </div>
+ 
+        <div class="auth-field">
+          <label class="fleg">Password</label>
+          <div class="auth-input-wrap">
+            <input type="password" id="login-password" class="auth-input"
+                   placeholder="••••••••" autocomplete="current-password"/>
+            <button class="auth-eye-btn" onclick="toggleAuthPassword('login-password', this)" title="Show/hide password">
+  <i data-lucide="eye" class="eye-icon"></i>
+</button>
+          </div>
+        </div>
+        <div class="auth-forgot-row" style="text-align:right;margin-top:-6px">
+          <button class="auth-link-btn" style="font-size:10px" onclick="openForgotPasswordDialog()">FORGOT PASSWORD?</button>
+        </div>
+        <div id="login-error" class="auth-error" style="display:none"></div>
+ 
+        <!-- Remember Me -->
+        <div class="auth-remember">
+          <label class="auth-remember__label">
+            <input type="checkbox" id="login-remember" class="auth-remember__checkbox"/>
+            <span>REMEMBER ME</span>
+          </label>
+        </div>
+ 
+        <div class="auth-actions">
+          <button class="wbtn auth-submit-btn" id="login-submit-btn" onclick="submitLogin()">
+            LOG IN
+          </button>
+        </div>
+ 
+        <div class="auth-switch">
+          No account?
+          <button class="auth-link-btn" onclick="showAuthScreen('register')">REGISTER</button>
+        </div>
+      </div>
+    </section>
+ 
+    <!-- ⓪b REGISTER -->
+    <section id="screen-register" class="screen">
+      <div class="auth-box win-raised">
+        <div class="auth-box__title">CREATE ACCOUNT</div>
+ 
+        <div class="auth-field">
+          <label class="fleg">Username</label>
+          <input type="text" id="register-username" class="auth-input"
+                 placeholder="your name" autocomplete="username"/>
+        </div>
+ 
+        <div class="auth-field">
+          <label class="fleg">Email</label>
+          <input type="email" id="register-email" class="auth-input"
+                 placeholder="your@email.com" autocomplete="email"/>
+        </div>
+ 
+        <div class="auth-field">
+          <label class="fleg">Password <small>(min 6 characters)</small></label>
+          <div class="auth-input-wrap">
+            <input type="password" id="register-password" class="auth-input"
+                   placeholder="••••••••" autocomplete="new-password"/>
+             <button class="auth-eye-btn" onclick="toggleAuthPassword('register-password', this)" title="Show/hide password">
+  <i data-lucide="eye" class="eye-icon"></i>
+</button>
+          </div>
+        </div>
+ 
+        <div id="register-error" class="auth-error" style="display:none"></div>
+ 
+        <div class="auth-actions">
+          <button class="wbtn auth-submit-btn" id="register-submit-btn" onclick="submitRegister()">
+            CREATE ACCOUNT
+          </button>
+        </div>
+ 
+        <div class="auth-switch">
+          Already have an account?
+          <button class="auth-link-btn" onclick="showAuthScreen('login')">LOG IN</button>
+        </div>
+      </div>
+    </section>
+
+        <!-- ① HOME -->
+        <section id="screen-home" class="screen">
+          <h1 class="home-title">VIRTUAL<br>WARDROBE</h1>
+          <div class="home-btns">
+            <button class="wbtn home-btn" onclick="showScreen('add')">ADD<br>ITEM</button>
+            <button class="wbtn home-btn" onclick="showScreen('browse-mode')">BROWSE<br>ITEMS</button>
+            <button class="wbtn home-btn" onclick="showScreen('find')">FIND<br>OUTFIT</button>
+            <button class="wbtn home-btn" onclick="showScreen('analysis-history')">Previous<br>ANALYSIS</button>
+          </div>
+        </section>
+
+        <!-- ② ADD ITEM -->
+        <section id="screen-add" class="screen">
+          <div class="upload-panel win-inset" id="upload-area">
+            <img id="upload-preview" class="upload-img" alt="preview" />
+            <div class="upload-ph" id="upload-ph">
+              <span class="upload-ph-icon">[IMG]</span>
+              <small>Click to upload your photo</small>
+            </div>
+            <input type="file" id="file-input" accept="image/*" style="display:none" />
+          </div>
+          <div class="details-panel win-raised">
+            <h2 class="panel-head">ITEM DETAILS</h2>
+            <fieldset class="fset">
+              <legend class="fleg">Please select your item category:</legend>
+              <div class="radio-grid" id="type-radios">
+                <span style="color:var(--gray);font-size:11px">Loading categories…</span>
+              </div>
+            </fieldset>
+            <fieldset class="fset">
+              <legend class="fleg">Select item color:</legend>
+              <input type="color" id="item-color" class="color-pick" value="#FFFFFF" />
+            </fieldset>
+            <fieldset class="fset">
+              <legend class="fleg">Comfortable?</legend>
+              <div class="radio-row">
+                <label class="clabel"><input type="radio" name="comfort" value="YES" checked>YES</label>
+                <label class="clabel"><input type="radio" name="comfort" value="NO">NO</label>
+              </div>
+            </fieldset>
+            <fieldset class="fset">
+              <legend class="fleg">Type of occasion:</legend>
+              <div class="check-grid" id="occasion-checks"></div>
+            </fieldset>
+            <fieldset class="fset">
+              <legend class="fleg">Season:</legend>
+              <div class="radio-grid" id="Season-radios"></div>
+            </fieldset>
+            <fieldset class="fset">
+              <legend class="fleg">Note (optional):</legend>
+              <input type="text" id="item-note" style="
+                width:100%; padding:5px 8px; font-family:var(--font-body); font-size:11px;
+                background:var(--white); border:2px solid;
+                border-color:var(--gray) var(--white) var(--white) var(--gray);
+              " placeholder="e.g. gift from mum" />
+            </fieldset>
+            <div class="add-row">
+              <button class="wbtn add-btn" onclick="addItem()">ADD<br>PIECE</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ③ BROWSE MODE -->
+        <section id="screen-browse-mode" class="screen">
+          <div class="browse-mode-grid" id="browse-mode-grid"></div>
+        </section>
+
+        <!-- ④ BROWSE FILTER -->
+        <section id="screen-browse-filter" class="screen">
+          <h2 class="filter-title" id="filter-title">SELECT FILTER</h2>
+          <div class="cats-grid" id="filter-grid"></div>
+        </section>
+
+        <!-- ⑤ BROWSE ITEMS -->
+        <section id="screen-browse-items" class="screen">
+          <div class="bi-topbar">
+            <span class="bi-title" id="bi-title">ITEMS</span>
+            <span class="bi-count" id="bi-count">0 items</span>
+          </div>
+          <div class="bi-grid" id="bi-grid"></div>
+        </section>
+
+  
+    <!-- ⑥ FIND MODE PICKER -->
+    <section id="screen-find-mode" class="screen">
+      <div class="find-mode-wrap">
+        <h2 class="filter-title">BUILD YOUR OUTFIT</h2>
+        <div class="find-mode-btns">
+          <button class="wbtn find-mode-btn" onclick="chooseFindMode('topbottom')">
+            <span class="find-mode-label">TOP &amp;<br>BOTTOM</span>
+          </button>
+          <button class="wbtn find-mode-btn" onclick="chooseFindMode('dress')">
+            <span class="find-mode-label">DRESS</span>
+          </button>
+        </div>
+      </div>
+    </section>
+ 
+    <!-- ⑥b FIND OUTFIT — TOP & BOTTOM -->
+    <section id="screen-find" class="screen">
+      <div class="find-side find-side--left">
+        <button class="wbtn side-btn" id="save-outfit-btn" onclick="saveBasic()">SAVE BASIC</button>
+        <button class="wbtn side-btn" onclick="goAccessorize()">ACCESSORIZE</button>
+      </div>
+      <div class="find-center">
+        <div class="slot">
+          <div class="slot-img win-inset" id="slot-top"><div class="slot-empty"><span>NO TOP</span><small>ADD ITEMS FIRST</small></div></div>
+          <div class="slot-nav"><button class="wbtn nav-btn" onclick="cycleItem('top',-1)">⏮</button><button class="wbtn nav-btn nav-btn--play" onclick="stopSlot('top')">▶</button><button class="wbtn nav-btn" onclick="cycleItem('top',1)">⏭</button></div>
+        </div>
+        <div class="slot">
+          <div class="slot-img win-inset" id="slot-bot"><div class="slot-empty"><span>NO BOTTOM</span><small>ADD ITEMS FIRST</small></div></div>
+          <div class="slot-nav"><button class="wbtn nav-btn" onclick="cycleItem('bottom',-1)">⏮</button><button class="wbtn nav-btn nav-btn--play" onclick="stopSlot('bottom')">▶</button><button class="wbtn nav-btn" onclick="cycleItem('bottom',1)">⏭</button></div>
+        </div>
+        <button class="prev-outfits-bar win-raised" id="side-btn" onclick="handleSideBtn()">▶ TOP</button>
+        <div class="prev-outfits-bar win-raised" onclick="showScreen('prev-outfits')">PREVIOUS OUTFITS</div>
+      </div>
+      <div class="find-side find-side--right">
+        <button class="wbtn side-btn side-btn--cher" onclick="getCherAdvice()">CHER'S ADVICE</button>
+        <button class="wbtn side-btn side-btn--suit" onclick="willItSuitMe()">SUIT ME?</button>
+      </div>
+    </section>
+ 
+    <!-- ⑥c FIND OUTFIT — DRESS -->
+    <section id="screen-find-dress" class="screen">
+ 
+      <!-- LEFT: save + accessorize -->
+      <div class="find-side find-side--left">
+        <button class="wbtn side-btn" onclick="saveBasic()">SAVE<br>BASIC</button>
+        <button class="wbtn side-btn" onclick="goAccessorize()">ACCESS<br>ORIZE</button>
+      </div>
+ 
+      <!-- CENTER: single big dress slot -->
+      <div class="find-center">
+        <div class="slot slot--dress">
+          <div class="slot-img  win-inset" id="slot-dress"><div class="slot-empty"><span>NO DRESS</span><small>ADD ITEMS FIRST</small></div></div>
+          <div class="slot-nav "><button class="wbtn nav-btn" onclick="cycleItem('dress',-1)">⏮</button><button class="wbtn nav-btn nav-btn--play" onclick="stopSlot('dress')">▶</button><button class="wbtn nav-btn" onclick="cycleItem('dress',1)">⏭</button></div>
+        </div>
+        <button class="prev-outfits-bar win-raised" id="side-btn-dress"
+                onclick="handleSideBtnDress()">▶ DRESS</button>
+        <div class="prev-outfits-bar win-raised"
+             onclick="showScreen('prev-outfits')">PREVIOUS OUTFITS</div>
+      </div>
+ 
+      <!-- RIGHT: AI buttons -->
+      <div class="find-side find-side--right">
+        <button class="wbtn side-btn side-btn--cher" onclick="getCherAdvice()">CHER'S<br>ADVICE</button>
+        <button class="wbtn side-btn side-btn--suit" onclick="willItSuitMe()">SUIT<br>ME?</button>
+      </div>
+ 
+    </section>
+ 
+       <!-- ⑦ ACCESSORIZE -->
+    <section id="screen-accessorize" class="screen">
+      <div class="acc-screen">
+ 
+        <!-- Top bar: centered title + right-aligned counter + button -->
+        <div class="acc-topbar">
+          <div class="acc-topbar__center">
+            <h2 class="filter-title" style="margin:0">ACCESSORIES</h2>
+          </div>
+          <div class="acc-topbar__right">
+            <span class="acc-selected-count" id="acc-selected-count">0 selected</span>
+            <button class="wbtn acc-create-btn" id="create-outfit-btn" onclick="createOutfit()">
+              CREATE OUTFIT
+            </button>
+          </div>
+        </div>
+ 
+        <!-- Category cards grid -->
+        <div class="acc-groups-container" id="acc-groups-container">
+          <div class="bi-empty win-raised">No accessories found.<br>Add some items first!</div>
+        </div>
+ 
+      </div>
+    </section>
+
+        <!-- ⑧ PREVIOUS OUTFITS -->
+        <section id="screen-prev-outfits" class="screen">
+          <div class="prev-outfits-screen">
+            <h2 class="filter-title">SAVED OUTFITS</h2>
+            <div id="prev-outfits-grid" class="prev-outfits-grid">
+              <span style="color:var(--gray);font-size:13px">Loading…</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ⑨ ANALYSIS HISTORY -->
+        <section id="screen-analysis-history" class="screen">
+          <div class="prev-outfits-screen">
+            <div class="bi-topbar" style="margin-bottom:10px">
+              <span class="bi-title">STYLE HISTORY</span>
+              <span class="bi-count" id="analysis-history-count">0 analyses</span>
+            </div>
+            <div id="analysis-history-grid" class="analysis-history-grid">
+              <span style="color:var(--gray);font-size:13px">Loading…</span>
+            </div>
+          </div>
+        </section>
+ 
+
+      </main>
+
+      <!-- ── TASKBAR ──────────────────────────────────────────── -->
+      <footer class="taskbar" id="taskbar"></footer>
+
+    </div><!-- /.shell -->
+
+    <!-- ══════════════════════════════════════════════════════════
+         DIALOGS — all outside .shell so they overlay everything
+         and never affect the taskbar layout
+    ══════════════════════════════════════════════════════════ -->
+
+<!-- Cher AI Dialog -->
+<div class="dialog-back" id="dialog-back" style="display:none">
+  <div class="dialog win-raised" onclick="event.stopPropagation()">
+    <div class="dialog-bar">
+      <span id="dialog-title">✨ CHER SAYS...</span>
+      <button class="win-ctrl" onclick="dismissDialog()">✕</button>
+    </div>
+    <div class="dialog-body" id="dialog-body"></div>
+    <div class="dialog-foot" style="gap:8px">
+      <button class="wbtn" id="dialog-cancel-btn" style="display:none" onclick="dismissDialog()">CANCEL</button>
+      <button class="wbtn" id="dialog-ok-btn" onclick="confirmDialogOk()">OK</button>
+    </div>
+  </div>
+</div>
+
+    <!-- Outfit Name Dialog -->
+    <div class="outfit-dialog-back" id="outfit-dialog-back" style="display:none">
+      <div class="outfit-dialog win-raised">
+        <div class="dialog-bar">
+          <span>✨ NAME YOUR OUTFIT</span>
+          <button class="win-ctrl" onclick="cancelOutfitDialog()">✕</button>
+        </div>
+        <div class="outfit-dialog-body">
+          <label class="fleg">Outfit Name</label>
+          <input type="text" id="outfit-name-input" class="outfit-text-input"
+            placeholder="e.g. Sunday Brunch Look" maxlength="60" />
+          <label class="fleg" style="margin-top:10px">Description (optional)</label>
+          <input type="text" id="outfit-desc-input" class="outfit-text-input"
+            placeholder="e.g. My comfy casual outfit" maxlength="120" />
+        </div>
+        <div class="dialog-foot" style="gap:8px">
+          <button class="wbtn" onclick="cancelOutfitDialog()">CANCEL</button>
+          <button class="wbtn" id="outfit-dialog-confirm-btn" onclick="confirmOutfitDialog()">SAVE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Will It Suit Me? Dialog -->
+    <div class="tryon-dialog-back" id="suitme-dialog-back" style="display:none">
+      <div class="tryon-dialog win-raised" onclick="event.stopPropagation()" style="max-width:760px">
+        <div class="dialog-bar">
+          <span>✨ WILL IT SUIT ME?</span>
+          <button class="win-ctrl" id="suitme-close-btn">✕</button>
+        </div>
+        <div class="tryon-dialog-body">
+
+          <!-- Left: upload user photo -->
+          <div class="tryon-upload-col">
+            <div class="fleg" style="margin-bottom:6px">YOUR PHOTO</div>
+            <div class="tryon-upload-area win-inset" id="suitme-upload-area">
+              <img id="suitme-preview" style="display:none;width:100%;height:100%;object-fit:cover" alt="your photo" />
+              <div id="suitme-upload-hint" style="display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--gray)">
+                <span style="font-family:var(--font-head);font-size:22px">[IMG]</span>
+                <small style="font-size:11px;text-align:center">Click to upload<br>full-body photo</small>
+              </div>
+              <input type="file" id="suitme-file-input" accept="image/*" style="display:none" />
+            </div>
+          </div>
+
+          <!-- Right: analysis result -->
+          <div class="tryon-result-col">
+            <div class="fleg" style="margin-bottom:6px">ANALYSIS</div>
+            <div class="tryon-result-area win-inset" style="overflow-y:auto">
+              <div id="suitme-loading" style="display:none;flex-direction:column;align-items:center;gap:8px;color:var(--gray)">
+                <span class="dialog-loading" style="font-size:12px">Analyzing your look…</span>
+                <small style="font-size:10px">This may take 10–20 seconds</small>
+              </div>
+              <!-- Result injected here by ui.showSuitMeResult() -->
+              <div id="suitme-result-wrap" style="display:none;width:100%;padding:4px"></div>
+              <div id="suitme-placeholder" style="display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--gray)">
+                <span style="font-family:var(--font-head);font-size:22px">[AI]</span>
+                <small style="font-size:11px;text-align:center">Upload your photo<br>and click ANALYZE</small>
+              </div>
+            </div>
+            <div id="suitme-error" style="display:none;color:#8B0000;font-size:11px;margin-top:6px;text-align:center"></div>
+          </div>
+
+        </div>
+        <div class="dialog-foot" style="gap:8px">
+          <button class="wbtn" id="suitme-close-btn-foot">CANCEL</button>
+          <button class="wbtn" id="suitme-analyze-btn" style="background:#707070;color:var(--white)">ANALYZE</button>
+        </div>
+      </div>
+    </div>
+
+<!-- ══ EDIT ITEM DIALOG ══════════════════════════════════ -->
+<div class="outfit-dialog-back" id="edit-item-dialog-back" style="display:none">
+  <div class="outfit-dialog win-raised" style="min-width:360px;max-width:460px" onclick="event.stopPropagation()">
+    <div class="dialog-bar"><span>✏️ EDIT ITEM</span><button class="win-ctrl" onclick="cancelEditItemDialog()">✕</button></div>
+    <div class="outfit-dialog-body" style="gap:10px;max-height:480px;overflow-y:auto">
+ 
+      <label class="fleg">Color</label>
+      <input type="color" id="edit-item-color" class="color-pick" value="#FF0000" style="width:48px;height:28px"/>
+ 
+      <label class="fleg" style="margin-top:8px">Comfortable?</label>
+      <div class="radio-row">
+        <label class="clabel"><input type="radio" name="edit-comfort" value="YES"> YES</label>
+        <label class="clabel"><input type="radio" name="edit-comfort" value="NO"> NO</label>
+      </div>
+ 
+      <label class="fleg" style="margin-top:8px">Season</label>
+      <div class="radio-row" style="flex-wrap:wrap;gap:6px">
+        <label class="clabel"><input type="radio" name="edit-season" value=""> ANY</label>
+        <label class="clabel"><input type="radio" name="edit-season" value="SUMMER"> SUMMER</label>
+        <label class="clabel"><input type="radio" name="edit-season" value="WINTER"> WINTER</label>
+        <label class="clabel"><input type="radio" name="edit-season" value="SPRING"> SPRING</label>
+        <label class="clabel"><input type="radio" name="edit-season" value="FALL"> FALL</label>
+      </div>
+ 
+      <label class="fleg" style="margin-top:8px">Occasions</label>
+      <div class="check-grid" style="grid-template-columns:repeat(2,1fr)">
+        <label class="clabel"><input type="checkbox" name="edit-occasion" value="CASUAL"> CASUAL</label>
+        <label class="clabel"><input type="checkbox" name="edit-occasion" value="BUSINESS_FORMAL"> BUSINESS FORMAL</label>
+        <label class="clabel"><input type="checkbox" name="edit-occasion" value="FORMAL_EVENTS"> FORMAL EVENTS</label>
+        <label class="clabel"><input type="checkbox" name="edit-occasion" value="SEMI_FORMAL"> SEMI FORMAL</label>
+        <label class="clabel"><input type="checkbox" name="edit-occasion" value="WEDDINGS"> WEDDINGS</label>
+        <label class="clabel"><input type="checkbox" name="edit-occasion" value="CASUAL_EVENTS"> CASUAL EVENTS</label>
+        <label class="clabel"><input type="checkbox" name="edit-occasion" value="FUNERALS"> FUNERALS</label>
+        <label class="clabel"><input type="checkbox" name="edit-occasion" value="EVENING_WEAR"> EVENING WEAR</label>
+        <label class="clabel"><input type="checkbox" name="edit-occasion" value="OUTDOOR"> OUTDOOR</label>
+      </div>
+ 
+      <label class="fleg" style="margin-top:8px">Note</label>
+      <input type="text" id="edit-item-note" class="outfit-text-input" placeholder="e.g. gift from mum" maxlength="200"/>
+    </div>
+    <div class="dialog-foot" style="gap:8px">
+      <button class="wbtn" onclick="cancelEditItemDialog()">CANCEL</button>
+      <button class="wbtn" id="edit-item-confirm-btn" onclick="confirmEditItemDialog()" style="background:#707070;color:var(--white)">SAVE CHANGES</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══ EDIT OUTFIT DIALOG ════════════════════════════════ -->
+<div class="outfit-dialog-back" id="edit-outfit-dialog-back" style="display:none">
+  <div class="outfit-dialog win-raised" style="min-width:480px;max-width:640px;width:90vw" onclick="event.stopPropagation()">
+    <div class="dialog-bar"><span>✏️ EDIT OUTFIT</span><button class="win-ctrl" onclick="cancelEditOutfitDialog()">✕</button></div>
+    <div class="outfit-dialog-body" style="gap:10px">
+ 
+      <label class="fleg">Outfit Name</label>
+      <input type="text" id="edit-outfit-name" class="outfit-text-input" placeholder="e.g. Sunday Brunch Look" maxlength="60"/>
+ 
+      <label class="fleg" style="margin-top:8px">Description (optional)</label>
+      <input type="text" id="edit-outfit-desc" class="outfit-text-input" placeholder="e.g. My comfy casual outfit" maxlength="120"/>
+ 
+      <label class="fleg" style="margin-top:10px">SELECT ITEMS <small style="font-weight:normal;letter-spacing:0;font-family:var(--font-body)">(tap to add/remove)</small></label>
+      <!-- Scrollable item picker grid -->
+      <div id="edit-outfit-items-grid" class="edit-outfit-items-grid"></div>
+ 
+    </div>
+    <div class="dialog-foot" style="gap:8px">
+      <button class="wbtn" onclick="cancelEditOutfitDialog()">CANCEL</button>
+      <button class="wbtn" id="edit-outfit-confirm-btn" onclick="confirmEditOutfitDialog()" style="background:#707070;color:var(--white)">SAVE CHANGES</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FORGOT PASSWORD DIALOG (3-step) ══════════════════ -->
+<div class="outfit-dialog-back" id="fp-dialog-back" style="display:none">
+  <div class="outfit-dialog win-raised" style="min-width:340px;max-width:400px" onclick="event.stopPropagation()">
+    <div class="dialog-bar">
+      <span id="fp-dialog-title">🔑 RESET PASSWORD</span>
+      <button class="win-ctrl" onclick="cancelForgotPasswordDialog()">✕</button>
+    </div>
+
+    <div class="outfit-dialog-body" style="gap:10px">
+
+      <!-- STEP 1: email -->
+      <div id="fp-step-email">
+        <label class="fleg">Enter your account email</label>
+        <input type="email" id="fp-email-input" class="outfit-text-input"
+               placeholder="your@email.com" autocomplete="email"/>
+        <div id="fp-email-error" class="auth-error" style="display:none;margin-top:8px"></div>
+      </div>
+
+      <!-- STEP 2: otp -->
+      <div id="fp-step-otp" style="display:none">
+        <label class="fleg">Enter the OTP sent to <span id="fp-otp-email-display"></span></label>
+        <input type="text" id="fp-otp-input" class="outfit-text-input"
+               placeholder="6-digit code" maxlength="10" autocomplete="one-time-code"/>
+        <div id="fp-otp-error" class="auth-error" style="display:none;margin-top:8px"></div>
+      </div>
+
+      <!-- STEP 3: new password -->
+      <div id="fp-step-reset" style="display:none">
+        <label class="fleg">New password <small>(min 6 characters)</small></label>
+        <div class="auth-input-wrap">
+          <input type="password" id="fp-newpass-input" class="auth-input"
+                 placeholder="••••••••" autocomplete="new-password"/>
+<button class="auth-eye-btn" onclick="toggleAuthPassword('fp-newpass-input', this)" title="Show/hide password">
+  <i data-lucide="eye" class="eye-icon"></i>
+</button>        </div>
+        <div id="fp-reset-error" class="auth-error" style="display:none;margin-top:8px"></div>
+      </div>
+
+      <!-- STEP 4: success -->
+      <div id="fp-step-success" style="display:none;text-align:center;padding:10px 0">
+        <div style="font-size:28px;margin-bottom:8px">✓</div>
+        <div style="font-family:var(--font-head);font-size:12px;letter-spacing:1px">PASSWORD RESET!</div>
+        <div style="font-size:11px;color:var(--gray);margin-top:6px">You can now log in with your new password.</div>
+      </div>
+
+    </div>
+
+    <div class="dialog-foot" style="gap:8px">
+      <button class="wbtn" id="fp-cancel-btn" onclick="cancelForgotPasswordDialog()">CANCEL</button>
+      <button class="wbtn" id="fp-confirm-btn" style="background:#707070;color:var(--white)">SEND OTP</button>
+    </div>
+  </div>
+</div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,600 @@
+/* ── DESIGN TOKENS ─────────────────────────────────────── */
+:root {
+  --silver:      #C0C0C0;
+  --silver-lite: #D8D8D8;
+  --gray:        #808080;
+  --black:       #000000;
+  --white:       #FFFFFF;
+  --font-head:   'Black Ops One', 'Courier New', monospace;
+  --font-body:   'Share Tech Mono', 'Courier New', monospace;
+  /* --leopard-bg injected by app.js */
+}
+
+/* ── RESET ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: var(--font-body);
+  background: var(--black);
+}
+
+/* ── APP SHELL ──────────────────────────────────────────── */
+.shell {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── TITLE BAR ──────────────────────────────────────────── */
+.titlebar {
+  background: var(--black);
+  color: var(--white);
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  user-select: none;
+  position: relative;
+}
+.titlebar__title {
+  font-family: var(--font-head);
+  font-size: 13px;
+  letter-spacing: 2px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.titlebar__left  { display: flex; align-items: center; min-width: 80px; }
+.titlebar__ctrls { display: flex; gap: 4px; }
+
+/* ── WIN CONTROL BUTTONS ────────────────────────────────── */
+.win-ctrl {
+  width: 22px; height: 20px;
+  background: var(--silver);
+  border: 2px solid;
+  border-color: var(--white) var(--gray) var(--gray) var(--white);
+  font-size: 10px; cursor: pointer; color: var(--black);
+  font-family: var(--font-body);
+  display: flex; align-items: center; justify-content: center;
+}
+.win-ctrl:active {
+  border-color: var(--gray) var(--white) var(--white) var(--gray);
+  padding: 1px 0 0 1px;
+}
+
+/* ── CANVAS ─────────────────────────────────────────────── */
+.canvas {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background-image: var(--leopard-bg);
+  /* background-repeat: repeat;
+  background-size: 220px 220px; */
+  background-repeat: no-repeat;
+  background-size: 100% ; 
+}
+
+/* ── TASKBAR ────────────────────────────────────────────── */
+.taskbar {
+  background: var(--black);
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 8px;
+}
+
+/* ── WIN98 BUTTON BASE ──────────────────────────────────── */
+.wbtn {
+  font-family: var(--font-head);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: var(--silver);
+  border: 2px solid;
+  border-color: var(--white) var(--gray) var(--gray) var(--white);
+  padding: 8px 18px;
+  cursor: pointer;
+  color: var(--black);
+  line-height: 1.4;
+  text-align: center;
+  white-space: normal;
+  user-select: none;
+  transition: background .08s;
+}
+.wbtn:hover:not(:disabled)  { background: var(--silver-lite); }
+.wbtn:active:not(:disabled):not(.nav-btn) {
+  border-color: var(--gray) var(--white) var(--white) var(--gray);
+  padding: 9px 17px 7px 19px;
+}
+.wbtn:disabled { color: var(--gray); cursor: default; }
+
+/* ── WIN98 PANELS ───────────────────────────────────────── */
+.win-raised {
+  background: var(--silver);
+  border: 2px solid;
+  border-color: var(--white) var(--gray) var(--gray) var(--white);
+}
+.win-inset {
+  background: var(--white);
+  border: 2px solid;
+  border-color: var(--gray) var(--white) var(--white) var(--gray);
+}
+
+/* ── SCREENS ────────────────────────────────────────────── */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.screen.active { display: flex; }
+
+/* ══ HOME SCREEN ════════════════════════════════════════════ */
+.home-title {
+  font-family: var(--font-head);
+  font-size: clamp(52px, 9vw, 96px);
+  text-align: center;
+  line-height: 1.05;
+  color: var(--white);
+  letter-spacing: 6px;
+  text-shadow:
+    3px  3px 0 #000, -2px -2px 0 #000,
+    2px -2px 0 #000, -2px  2px 0 #000,
+    5px  5px 0 rgba(0,0,0,.4);
+  margin-bottom: 40px;
+}
+.home-btns { display: flex; gap: 20px; }
+.home-btn  { font-size: 15px !important; padding: 16px 30px !important; min-width: 140px; }
+
+/* ══ ADD ITEM SCREEN ════════════════════════════════════════ */
+#screen-add {
+  flex-direction: row;
+  gap: 16px;
+  padding: 20px;
+}
+.upload-panel {
+  width: 310px;
+  height: min(560px, calc(100vh - 130px));
+  flex-shrink: 0;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.upload-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.upload-ph  {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 12px;
+  color: var(--gray);
+}
+.upload-ph-icon {
+  font-family: var(--font-head);
+  font-size: 32px; color: #404040; letter-spacing: 3px;
+}
+.upload-ph small { font-size: 12px; text-align: center; }
+
+.details-panel {
+  width: 430px;
+  height: min(560px, calc(100vh - 130px));
+  padding: 18px 22px;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.panel-head {
+  font-family: var(--font-head);
+  font-size: 17px; letter-spacing: 3px; text-align: center;
+  border-bottom: 2px solid var(--gray);
+  padding-bottom: 10px; margin-bottom: 4px;
+}
+.fset  { border: none; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.fleg  { font-size: 12px; font-weight: bold; letter-spacing: .5px; margin-bottom: 3px; }
+.radio-grid  { display: grid; grid-template-columns: repeat(4,auto); justify-content: start; gap: 4px 14px; }
+.radio-row   { display: flex; gap: 16px; }
+.check-grid  { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px 8px; }
+.clabel {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; cursor: pointer; letter-spacing: .3px;
+}
+.color-pick {
+  width: 66px; height: 30px; cursor: pointer; padding: 2px;
+  background: var(--silver);
+  border: 2px solid; border-color: var(--gray) var(--white) var(--white) var(--gray);
+}
+.add-row { margin-top: 8px; display: flex; justify-content: center; }
+.add-btn { font-size: 16px !important; padding: 12px 36px !important; letter-spacing: 3px !important; }
+
+/* ══ BROWSE CATEGORIES ══════════════════════════════════════ */
+.cats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 185px));
+  gap: 12px;
+}
+.cat-btn { font-size: 14px !important; padding: 18px 0 !important; letter-spacing: 2px !important; width: 100%; }
+
+/* ══ BROWSE ITEMS ═══════════════════════════════════════════ */
+#screen-browse-items {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 14px;
+  gap: 12px;
+}
+.bi-topbar {
+  display: flex; align-items: center; gap: 14px; flex-shrink: 0;
+}
+.bi-title {
+  font-family: var(--font-head);
+  font-size: 22px; letter-spacing: 4px; color: var(--white);
+  text-shadow: 2px 2px 0 #000, -1px -1px 0 #000;
+}
+.bi-count {
+  font-size: 12px; color: var(--white);
+  background: rgba(0,0,0,.5); padding: 3px 8px; margin-left: auto;
+}
+.bi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 12px; overflow-y: auto; align-content: start; flex: 1;
+}
+.bi-empty { padding: 20px 28px; font-size: 13px; line-height: 1.7; }
+
+.item-card { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.item-thumb {
+  height: 150px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.item-img         { width: 60%; height: 100%; object-fit: cover; }
+.item-color-fill  { width: 100%; height: 100%; }
+.item-info        { display: flex; flex-direction: column; gap: 4px; }
+.item-itype       { font-family: var(--font-head); font-size: 12px; letter-spacing: 1px; }
+.item-row         { display: flex; align-items: center; gap: 6px; }
+.item-dot         { width: 13px; height: 13px; border: 1px solid var(--gray); flex-shrink: 0; }
+.item-comf        { font-size: 10px; color: #404040; }
+.item-occs        { display: flex; flex-wrap: wrap; gap: 3px; }
+.occ-chip         { font-size: 9px; background: #a0a0a0; border: 1px solid var(--gray); padding: 1px 4px; }
+.occ-more         { font-size: 9px; color: #606060; }
+
+.item-season {
+  font-size: 9px;
+  background: var(--black);
+  color: var(--white);
+  padding: 1px 5px;
+  letter-spacing: .5px;
+  margin-left: auto;
+}
+ 
+.item-card { position: relative; }
+ 
+.item-delete-btn {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 18px; height: 18px;
+  background: #8B0000;
+  color: var(--white);
+  border: 1px solid #600;
+  font-size: 9px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity .15s;
+  padding: 0;
+  line-height: 1;
+}
+.item-card:hover .item-delete-btn { opacity: 1; }
+/* ══ FIND OUTFIT ════════════════════════════════════════════ */
+#screen-find {
+  flex-direction: row;
+  align-items: center;
+  justify-content: stretch;
+  gap: 0;
+}
+.find-side {
+  width: 130px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  height: 100%;
+}
+.find-center {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px; padding: 14px 0; height: 100%;
+}
+.side-btn       { font-size: 14px !important; padding: 14px 10px !important; min-height: 78px; min-width: 90px; }
+.side-btn--dress { background: #b0b0b0 !important; }
+
+.slot { width: min(460px, 72vw); display: flex; flex-direction: column; }
+.slot-img {
+  height: clamp(200px, 19vh, 210px); overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.slot-photo { max-width: 100%; max-height: 100%; object-fit: contain; }
+.slot-color { width: 100%; height: 100%; }
+.slot-empty {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  color: var(--gray); font-size: 12px; text-align: center;
+}
+.slot-nav {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  background: var(--silver);
+  border-left:   2px solid var(--white);
+  border-right:  2px solid var(--gray);
+  border-bottom: 2px solid var(--gray);
+}
+.nav-btn {
+  padding: 8px !important;
+  font-size: 13px !important;
+  letter-spacing: 0 !important;
+  border: none !important;
+  border-right: 1px solid var(--gray) !important;
+}
+.nav-btn:last-child  { border-right: none !important; }
+.nav-btn--play       { font-size: 15px !important; }
+
+/* ── Taskbar shortcuts ──────────────────────────────────── */
+.task-btn       { font-size: 11px !important; padding: 5px 10px !important; letter-spacing: .5px !important; }
+.task-btn--mode { background: #909090 !important; }
+
+/* ══ CHER DIALOG ════════════════════════════════════════════ */
+.dialog-back {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.55);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 50;
+}
+.dialog { width: 420px; max-width: 92%; box-shadow: 4px 4px 0 rgba(0,0,0,.6); }
+.dialog-bar {
+  background: var(--black); color: var(--white);
+  padding: 7px 10px;
+  font-family: var(--font-head); font-size: 12px; letter-spacing: 2px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.dialog-body {
+  padding: 16px 20px; min-height: 60px;
+  font-size: 13px; line-height: 1.7;
+  border-top: 2px solid; border-color: var(--white) var(--gray) var(--gray) var(--white);
+}
+.dialog-loading { font-style: italic; color: #555; animation: blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+.dialog-foot {
+  padding: 12px; display: flex; justify-content: center;
+  border-top: 1px solid var(--gray);
+}
+
+/* ── Browse Mode grid ───────────────────────────────────── */
+.browse-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 200px));
+  gap: 14px;
+}
+/* 5th button spans full row nicely on its own */
+.browse-mode-grid .cat-btn:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  max-width: 200px;
+  margin: 0 auto;
+}
+ 
+/* ── Filter title ───────────────────────────────────────── */
+.filter-title {
+  font-family: var(--font-head);
+  font-size: 20px;
+  letter-spacing: 4px;
+  color: var(--white);
+  text-shadow: 2px 2px 0 #000, -1px -1px 0 #000;
+  margin-bottom: 18px;
+  text-align: center;
+}
+ 
+
+/* ── Find screen layout overhaul ───────────────────────── */
+.find-side--left,
+.find-side--right {
+  width: 130px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 100%;
+  padding: 10px 0;
+}
+ 
+.side-btn--acc   { background: #a0a0a0 !important; font-size: 12px !important; }
+.side-btn--cher  { background: #b8b8b8 !important; font-size: 12px !important; }
+.side-btn--save  { background: #909090 !important; font-size: 12px !important; }
+ 
+/* Previous outfits bar at bottom of center */
+.prev-outfits-bar {
+  width: 36.5%;
+  padding: 10px 14px;
+  font-family: var(--font-head);
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.prev-outfits-bar:hover { background: var(--silver-lite); }
+ 
+/* Accessory slot — taller since accessories are often portrait */
+.slot--acc .slot-img,
+.slot-img--acc {
+  height: clamp(200px, 35vh, 340px) !important;
+}
+ 
+/* Create outfit button on accessorize screen */
+.acc-save-btn {
+  font-size: 15px !important;
+  padding: 14px 30px !important;
+  letter-spacing: 2px !important;
+  margin-top: 12px;
+}
+ 
+/* Side-btn running indicator */
+.side-btn.running {
+  background: #707070 !important;
+  border-color: var(--gray) var(--white) var(--white) var(--gray) !important;
+}
+
+
+/*  
+/* ── Previous outfits panel ──────────────────────────────── */
+.prev-outfits-panel {
+  width: 100%;
+  max-height: 180px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 8px 6px;
+  background: var(--silver);
+  border: 2px solid;
+  border-color: var(--gray) var(--white) var(--white) var(--gray);
+  flex-shrink: 0;
+}
+ 
+.prev-outfit-card {
+  flex-shrink: 0;
+  width: 180px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+.prev-outfit-card:hover { background: var(--silver-lite); }
+ 
+.prev-outfit-name {
+  font-family: var(--font-head);
+  font-size: 10px;
+  letter-spacing: .5px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+ 
+.prev-outfit-items {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  justify-content: center;
+}
+ 
+.prev-outfit-thumb {
+  width: 32px;
+  height: 40px;
+  object-fit: cover;
+  border: 1px solid var(--gray);
+}
+ 
+.prev-outfit-swatch {
+  width: 32px;
+  height: 40px;
+  border: 1px solid var(--gray);
+}
+ 
+.prev-outfit-desc {
+  font-size: 9px;
+  color: #555;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+} */
+
+
+/* ── Outfit name/description dialog ──────────────────────── */
+.outfit-dialog-back {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.6);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 60;
+}
+.outfit-dialog {
+  width: 380px; max-width: 92%;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.6);
+}
+.outfit-dialog-body {
+  padding: 16px 20px;
+  display: flex; flex-direction: column; gap: 4px;
+  border-top: 2px solid; border-color: var(--white) var(--gray) var(--gray) var(--white);
+}
+.outfit-text-input {
+  width: 100%; padding: 6px 8px;
+  font-family: var(--font-body); font-size: 12px;
+  background: var(--white);
+  border: 2px solid; border-color: var(--gray) var(--white) var(--white) var(--gray);
+  outline: none;
+}
+.outfit-text-input:focus {
+  border-color: var(--black) var(--white) var(--white) var(--black);
+}
+ 
+/* ── Previous outfits screen ──────────────────────────────── */
+#screen-prev-outfits {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 14px;
+  gap: 12px;
+}
+.prev-outfits-screen {
+  display: flex; flex-direction: column;
+  width: 100%; height: 100%; gap: 12px;
+}
+.prev-outfits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  overflow-y: auto;
+  align-content: start;
+  flex: 1;
+}
+.prev-outfit-card {
+  padding: 10px;
+  display: flex; flex-direction: column; gap: 6px;
+  cursor: pointer;
+}
+.prev-outfit-card:hover { background: var(--silver-lite); }
+.prev-outfit-name {
+  font-family: var(--font-head);
+  font-size: 12px; letter-spacing: 1px;
+  text-align: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.prev-outfit-desc {
+  font-size: 10px; color: #555; text-align: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.prev-outfit-items {
+  display: flex; flex-direction: row;
+  gap: 4px; flex-wrap: wrap; justify-content: center;
+}
+.prev-outfit-thumb {
+  width:100%; height: 54px;
+  object-fit: cover;
+  border: 1px solid var(--gray);
+}
+.prev-outfit-swatch {
+  width: 44px; height: 54px;
+  border: 1px solid var(--gray);
+}
+ 
+ 
